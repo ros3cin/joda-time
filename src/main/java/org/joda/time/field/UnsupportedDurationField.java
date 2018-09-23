@@ -20,6 +20,7 @@ import java.util.HashMap;
 
 import org.joda.time.DurationField;
 import org.joda.time.DurationFieldType;
+import org.apache.commons.collections4.map.HashedMap;
 
 /**
  * A placeholder implementation to use when a duration field is not supported.
@@ -35,7 +36,7 @@ public final class UnsupportedDurationField extends DurationField implements Ser
     private static final long serialVersionUID = -6390301302770925357L;
 
     /** The cache of unsupported duration field instances */
-    private static HashMap<DurationFieldType, UnsupportedDurationField> cCache;
+    private static HashedMap<DurationFieldType, UnsupportedDurationField> cCache;
 
     /**
      * Gets an instance of UnsupportedDurationField for a specific named field.
@@ -47,7 +48,7 @@ public final class UnsupportedDurationField extends DurationField implements Ser
     public static synchronized UnsupportedDurationField getInstance(DurationFieldType type) {
         UnsupportedDurationField field;
         if (cCache == null) {
-            cCache = new HashMap<DurationFieldType, UnsupportedDurationField>(7);
+            cCache = new HashedMap<DurationFieldType, UnsupportedDurationField>(7);
             field = null;
         } else {
             field = cCache.get(type);

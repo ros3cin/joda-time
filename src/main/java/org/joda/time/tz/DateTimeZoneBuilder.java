@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
+import org.eclipse.collections.impl.list.mutable.FastList;
 
 import org.joda.time.Chronology;
 import org.joda.time.DateTime;
@@ -220,10 +221,10 @@ public class DateTimeZoneBuilder {
     }
 
     // List of RuleSets.
-    private final ArrayList<RuleSet> iRuleSets;
+    private final FastList<RuleSet> iRuleSets;
 
     public DateTimeZoneBuilder() {
-        iRuleSets = new ArrayList<RuleSet>(10);
+        iRuleSets = new FastList<RuleSet>(10);
     }
 
     /**
@@ -975,7 +976,7 @@ public class DateTimeZoneBuilder {
         }
 
         private int iStandardOffset;
-        private ArrayList<Rule> iRules;
+        private FastList<Rule> iRules;
 
         // Optional.
         private String iInitialNameKey;
@@ -986,7 +987,7 @@ public class DateTimeZoneBuilder {
         private OfYear iUpperOfYear;
 
         RuleSet() {
-            iRules = new ArrayList<Rule>(10);
+            iRules = new FastList<Rule>(10);
             iUpperYear = Integer.MAX_VALUE;
         }
 
@@ -995,7 +996,7 @@ public class DateTimeZoneBuilder {
          */
         RuleSet(RuleSet rs) {
             iStandardOffset = rs.iStandardOffset;
-            iRules = new ArrayList<Rule>(rs.iRules);
+            iRules = new FastList<Rule>(rs.iRules);
             iInitialNameKey = rs.iInitialNameKey;
             iInitialSaveMillis = rs.iInitialSaveMillis;
             iUpperYear = rs.iUpperYear;
@@ -1041,7 +1042,7 @@ public class DateTimeZoneBuilder {
             }
 
             // Make a copy before we destroy the rules.
-            ArrayList<Rule> copy = new ArrayList<Rule>(iRules);
+            FastList<Rule> copy = new FastList<Rule>(iRules);
 
             // Iterate through all the transitions until firstMillis is
             // reached. Use the name key and savings for whatever rule reaches

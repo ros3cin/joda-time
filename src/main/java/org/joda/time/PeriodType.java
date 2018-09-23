@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.joda.time.field.FieldUtils;
+import org.apache.commons.collections4.map.HashedMap;
 
 /**
  * Controls a period implementation by specifying which duration fields are to be used.
@@ -53,7 +54,7 @@ public class PeriodType implements Serializable {
     private static final long serialVersionUID = 2274324892792009998L;
 
     /** Cache of all the known types. */
-    private static final Map<PeriodType, Object> cTypes = new HashMap<PeriodType, Object>(32);
+    private static final Map<PeriodType, Object> cTypes = new HashedMap<PeriodType, Object>(32);
 
     static int YEAR_INDEX = 0;
     static int MONTH_INDEX = 1;

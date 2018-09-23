@@ -35,6 +35,7 @@ import org.joda.time.DurationFieldType;
 import org.joda.time.PeriodType;
 import org.joda.time.ReadWritablePeriod;
 import org.joda.time.ReadablePeriod;
+import org.eclipse.collections.impl.list.mutable.FastList;
 
 /**
  * Factory that creates complex instances of PeriodFormatter via method calls.
@@ -188,7 +189,7 @@ public class PeriodFormatterBuilder {
         iRejectSignedValues = false;
         iPrefix = null;
         if (iElementPairs == null) {
-            iElementPairs = new ArrayList<Object>();
+            iElementPairs = new FastList<Object>();
         } else {
             iElementPairs.clear();
         }

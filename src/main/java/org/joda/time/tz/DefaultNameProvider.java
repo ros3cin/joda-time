@@ -21,6 +21,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.joda.time.DateTimeUtils;
+import org.apache.commons.collections4.map.HashedMap;
 
 /**
  * The default name provider acquires localized names from
@@ -34,8 +35,8 @@ import org.joda.time.DateTimeUtils;
 @SuppressWarnings("unchecked")
 public class DefaultNameProvider implements NameProvider {
     // locale -> (id -> (nameKey -> [shortName, name]))
-    private HashMap<Locale, Map<String, Map<String, Object>>> iByLocaleCache = createCache();
-    private HashMap<Locale, Map<String, Map<Boolean, Object>>> iByLocaleCache2 = createCache();
+    private HashedMap<Locale, Map<String, Map<String, Object>>> iByLocaleCache = createCache();
+    private HashedMap<Locale, Map<String, Map<Boolean, Object>>> iByLocaleCache2 = createCache();
 
     public DefaultNameProvider() {
     }
@@ -155,7 +156,7 @@ public class DefaultNameProvider implements NameProvider {
     }
 
     //-----------------------------------------------------------------------
-    private HashMap createCache() {
-        return new HashMap(7);
+    private HashedMap createCache() {
+        return new HashedMap(7);
     }
 }

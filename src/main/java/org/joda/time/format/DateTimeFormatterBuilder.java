@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import org.apache.commons.collections4.map.HashedMap;
+import org.eclipse.collections.impl.list.mutable.FastList;
 
 import org.joda.time.Chronology;
 import org.joda.time.DateTimeConstants;
@@ -71,7 +73,7 @@ import org.joda.time.field.PreciseDateTimeField;
 public class DateTimeFormatterBuilder {
 
     /** Array of printers and parsers (alternating). */
-    private ArrayList<Object> iElementPairs;
+    private FastList<Object> iElementPairs;
     /** Cache of the last returned formatter. */
     private Object iFormatter;
 
@@ -81,7 +83,7 @@ public class DateTimeFormatterBuilder {
      */
     public DateTimeFormatterBuilder() {
         super();
-        iElementPairs = new ArrayList<Object>();
+        iElementPairs = new FastList<Object>();
     }
 
     //-----------------------------------------------------------------------
@@ -1655,7 +1657,7 @@ public class DateTimeFormatterBuilder {
             implements InternalPrinter, InternalParser {
 
         private static Map<Locale, Map<DateTimeFieldType, Object[]>> cParseCache =
-                    new ConcurrentHashMap<Locale, Map<DateTimeFieldType, Object[]>>();
+                    new org.eclipse.collections.impl.map.mutable.ConcurrentHashMap<Locale, Map<DateTimeFieldType, Object[]>>();
         private final DateTimeFieldType iFieldType;
         private final boolean iShort;
 
@@ -2325,7 +2327,7 @@ public class DateTimeFormatterBuilder {
         static {
             ALL_IDS = new ArrayList<String>(DateTimeZone.getAvailableIDs());
             Collections.sort(ALL_IDS);
-            GROUPED_IDS = new HashMap<String, List<String>>();
+            GROUPED_IDS = new HashedMap<String, List<String>>();
             int max = 0;
             int maxPrefix = 0;
             for (String id : ALL_IDS) {

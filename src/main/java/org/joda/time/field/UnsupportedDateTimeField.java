@@ -22,6 +22,7 @@ import org.joda.time.DateTimeField;
 import org.joda.time.DateTimeFieldType;
 import org.joda.time.DurationField;
 import org.joda.time.ReadablePartial;
+import org.apache.commons.collections4.map.HashedMap;
 
 /**
  * A placeholder implementation to use when a datetime field is not supported.
@@ -37,7 +38,7 @@ public final class UnsupportedDateTimeField extends DateTimeField implements Ser
     private static final long serialVersionUID = -1934618396111902255L;
 
     /** The cache of unsupported datetime field instances */
-    private static HashMap<DateTimeFieldType, UnsupportedDateTimeField> cCache;
+    private static HashedMap<DateTimeFieldType, UnsupportedDateTimeField> cCache;
 
     /**
      * Gets an instance of UnsupportedDateTimeField for a specific named field.
@@ -53,7 +54,7 @@ public final class UnsupportedDateTimeField extends DateTimeField implements Ser
 
         UnsupportedDateTimeField field;
         if (cCache == null) {
-            cCache = new HashMap<DateTimeFieldType, UnsupportedDateTimeField>(7);
+            cCache = new HashedMap<DateTimeFieldType, UnsupportedDateTimeField>(7);
             field = null;
         } else {
             field = cCache.get(type);
