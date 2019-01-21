@@ -17,7 +17,6 @@ package org.joda.time.field;
 
 import java.io.Serializable;
 import java.util.HashMap;
-
 import org.joda.time.DurationField;
 import org.joda.time.DurationFieldType;
 
@@ -31,23 +30,27 @@ import org.joda.time.DurationFieldType;
  */
 public final class UnsupportedDurationField extends DurationField implements Serializable {
 
-    /** Serialization lock. */
+    /**
+     * Serialization lock.
+     */
     private static final long serialVersionUID = -6390301302770925357L;
 
-    /** The cache of unsupported duration field instances */
-    private static HashMap<DurationFieldType, UnsupportedDurationField> cCache;
+    /**
+     * The cache of unsupported duration field instances
+     */
+    private static java.util.Map<DurationFieldType, UnsupportedDurationField> cCache;
 
     /**
      * Gets an instance of UnsupportedDurationField for a specific named field.
      * The returned instance is cached.
-     * 
+     *
      * @param type  the type to obtain
      * @return the instance
      */
     public static synchronized UnsupportedDurationField getInstance(DurationFieldType type) {
         UnsupportedDurationField field;
         if (cCache == null) {
-            cCache = new HashMap<DurationFieldType, UnsupportedDurationField>(7);
+            cCache = new java.util.LinkedHashMap<DurationFieldType, UnsupportedDurationField>(7);
             field = null;
         } else {
             field = cCache.get(type);
@@ -59,22 +62,23 @@ public final class UnsupportedDurationField extends DurationField implements Ser
         return field;
     }
 
-    /** The name of the field */
+    /**
+     * The name of the field
+     */
     private final DurationFieldType iType;
 
     /**
      * Constructor.
-     * 
+     *
      * @param type  the type to use
      */
     private UnsupportedDurationField(DurationFieldType type) {
         iType = type;
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     // Design note: Simple Accessors return a suitable value, but methods
     // intended to perform calculations throw an UnsupportedOperationException.
-
     public final DurationFieldType getType() {
         return iType;
     }
@@ -94,7 +98,7 @@ public final class UnsupportedDurationField extends DurationField implements Ser
 
     /**
      * This field is precise.
-     * 
+     *
      * @return true always
      */
     public boolean isPrecise() {
@@ -227,10 +231,10 @@ public final class UnsupportedDurationField extends DurationField implements Ser
         return 0;
     }
 
-    //------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     /**
      * Compares this duration field to another.
-     * 
+     *
      * @param obj  the object to compare to
      * @return true if equal
      */
@@ -249,7 +253,7 @@ public final class UnsupportedDurationField extends DurationField implements Ser
 
     /**
      * Gets a suitable hashcode.
-     * 
+     *
      * @return the hashcode
      */
     public int hashCode() {
@@ -258,7 +262,7 @@ public final class UnsupportedDurationField extends DurationField implements Ser
 
     /**
      * Get a suitable debug string.
-     * 
+     *
      * @return debug string
      */
     public String toString() {
@@ -275,5 +279,4 @@ public final class UnsupportedDurationField extends DurationField implements Ser
     private UnsupportedOperationException unsupported() {
         return new UnsupportedOperationException(iType + " field is unsupported");
     }
-
 }

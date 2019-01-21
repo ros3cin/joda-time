@@ -33,27 +33,29 @@ import org.joda.time.ReadablePartial;
  */
 public final class UnsupportedDateTimeField extends DateTimeField implements Serializable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = -1934618396111902255L;
 
-    /** The cache of unsupported datetime field instances */
-    private static HashMap<DateTimeFieldType, UnsupportedDateTimeField> cCache;
+    /**
+     * The cache of unsupported datetime field instances
+     */
+    private static java.util.Map<DateTimeFieldType, UnsupportedDateTimeField> cCache;
 
     /**
      * Gets an instance of UnsupportedDateTimeField for a specific named field.
      * Names should be of standard format, such as 'monthOfYear' or 'hourOfDay'.
      * The returned instance is cached.
-     * 
+     *
      * @param type  the type to obtain
      * @return the instance
      * @throws IllegalArgumentException if durationField is null
      */
-    public static synchronized UnsupportedDateTimeField getInstance(
-            DateTimeFieldType type, DurationField durationField) {
-
+    public static synchronized UnsupportedDateTimeField getInstance(DateTimeFieldType type, DurationField durationField) {
         UnsupportedDateTimeField field;
         if (cCache == null) {
-            cCache = new HashMap<DateTimeFieldType, UnsupportedDateTimeField>(7);
+            cCache = new java.util.LinkedHashMap<DateTimeFieldType, UnsupportedDateTimeField>(7);
             field = null;
         } else {
             field = cCache.get(type);
@@ -68,14 +70,19 @@ public final class UnsupportedDateTimeField extends DateTimeField implements Ser
         return field;
     }
 
-    /** The field type */
+    /**
+     * The field type
+     */
     private final DateTimeFieldType iType;
-    /** The duration of the datetime field */
+
+    /**
+     * The duration of the datetime field
+     */
     private final DurationField iDurationField;
 
     /**
      * Constructor.
-     * 
+     *
      * @param type  the field type
      * @param durationField  the duration to use
      */
@@ -87,10 +94,9 @@ public final class UnsupportedDateTimeField extends DateTimeField implements Ser
         iDurationField = durationField;
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     // Design note: Simple accessors return a suitable value, but methods
     // intended to perform calculations throw an UnsupportedOperationException.
-
     public DateTimeFieldType getType() {
         return iType;
     }
@@ -523,10 +529,10 @@ public final class UnsupportedDateTimeField extends DateTimeField implements Ser
         throw unsupported();
     }
 
-    //------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     /**
      * Get a suitable debug string.
-     * 
+     *
      * @return debug string
      */
     public String toString() {
@@ -543,5 +549,4 @@ public final class UnsupportedDateTimeField extends DateTimeField implements Ser
     private UnsupportedOperationException unsupported() {
         return new UnsupportedOperationException(iType + " field is unsupported");
     }
-
 }

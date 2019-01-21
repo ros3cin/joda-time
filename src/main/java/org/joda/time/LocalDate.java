@@ -26,7 +26,6 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TimeZone;
-
 import org.joda.convert.FromString;
 import org.joda.convert.ToString;
 import org.joda.time.base.BaseLocal;
@@ -79,21 +78,33 @@ import org.joda.time.format.ISODateTimeFormat;
  * @author Stephen Colebourne
  * @since 1.3
  */
-public final class LocalDate
-        extends BaseLocal
-        implements ReadablePartial, Serializable {
+public final class LocalDate extends BaseLocal implements ReadablePartial, Serializable {
 
-    /** Serialization lock */
+    /**
+     * Serialization lock
+     */
     private static final long serialVersionUID = -8775358157899L;
 
-    /** The index of the year field in the field array */
+    /**
+     * The index of the year field in the field array
+     */
     private static final int YEAR = 0;
-    /** The index of the monthOfYear field in the field array */
+
+    /**
+     * The index of the monthOfYear field in the field array
+     */
     private static final int MONTH_OF_YEAR = 1;
-    /** The index of the dayOfMonth field in the field array */
+
+    /**
+     * The index of the dayOfMonth field in the field array
+     */
     private static final int DAY_OF_MONTH = 2;
-    /** Set of known duration types. */
-    private static final Set<DurationFieldType> DATE_DURATION_TYPES = new HashSet<DurationFieldType>();
+
+    /**
+     * Set of known duration types.
+     */
+    private static final Set<DurationFieldType> DATE_DURATION_TYPES = new java.util.LinkedHashSet<DurationFieldType>();
+
     static {
         DATE_DURATION_TYPES.add(DurationFieldType.days());
         DATE_DURATION_TYPES.add(DurationFieldType.weeks());
@@ -105,18 +116,26 @@ public final class LocalDate
         DATE_DURATION_TYPES.add(DurationFieldType.eras());
     }
 
-    /** The local millis from 1970-01-01T00:00:00 */
+    /**
+     * The local millis from 1970-01-01T00:00:00
+     */
     private final long iLocalMillis;
-    /** The chronology to use in UTC. */
+
+    /**
+     * The chronology to use in UTC.
+     */
     private final Chronology iChronology;
-    /** The cached hash code. */
+
+    /**
+     * The cached hash code.
+     */
     private transient int iHash;
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Obtains a {@code LocalDate} set to the current system millisecond time
      * using <code>ISOChronology</code> in the default time zone.
-     * 
+     *
      * @return the current date-time, not null
      * @since 2.0
      */
@@ -154,12 +173,12 @@ public final class LocalDate
         return new LocalDate(chronology);
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Parses a {@code LocalDate} from the specified string.
      * <p>
      * This uses {@link ISODateTimeFormat#localDateParser()}.
-     * 
+     *
      * @param str  the string to parse, not null
      * @since 2.0
      */
@@ -170,7 +189,7 @@ public final class LocalDate
 
     /**
      * Parses a {@code LocalDate} from the specified string using a formatter.
-     * 
+     *
      * @param str  the string to parse, not null
      * @param formatter  the formatter to use, not null
      * @since 2.0
@@ -179,7 +198,7 @@ public final class LocalDate
         return formatter.parseLocalDate(str);
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Constructs a LocalDate from a <code>java.util.Calendar</code>
      * using exactly the same field values.
@@ -209,11 +228,7 @@ public final class LocalDate
         }
         int era = calendar.get(Calendar.ERA);
         int yearOfEra = calendar.get(Calendar.YEAR);
-        return new LocalDate(
-            (era == GregorianCalendar.AD ? yearOfEra : 1 - yearOfEra),
-            calendar.get(Calendar.MONTH) + 1,
-            calendar.get(Calendar.DAY_OF_MONTH)
-        );
+        return new LocalDate((era == GregorianCalendar.AD ? yearOfEra : 1 - yearOfEra), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));
     }
 
     /**
@@ -247,20 +262,15 @@ public final class LocalDate
             cal.setTime(date);
             return fromCalendarFields(cal);
         }
-        return new LocalDate(
-            date.getYear() + 1900,
-            date.getMonth() + 1,
-            date.getDate()
-        );
+        return new LocalDate(date.getYear() + 1900, date.getMonth() + 1, date.getDate());
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Constructs an instance set to the current local time evaluated using
      * ISO chronology in the default zone.
      * <p>
      * Once the constructor is completed, the zone is no longer used.
-     * 
+     *
      * @see #now()
      */
     public LocalDate() {
@@ -295,7 +305,6 @@ public final class LocalDate
         this(DateTimeUtils.currentTimeMillis(), chronology);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Constructs an instance set to the local time defined by the specified
      * instant evaluated using ISO chronology in the default zone.
@@ -334,14 +343,12 @@ public final class LocalDate
      */
     public LocalDate(long instant, Chronology chronology) {
         chronology = DateTimeUtils.getChronology(chronology);
-        
         long localMillis = chronology.getZone().getMillisKeepLocal(DateTimeZone.UTC, instant);
         chronology = chronology.withUTC();
         iLocalMillis = chronology.dayOfMonth().roundFloor(localMillis);
         iChronology = chronology;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Constructs an instance from an Object that represents a datetime.
      * The time zone will be retrieved from the object if possible,
@@ -420,7 +427,6 @@ public final class LocalDate
         iLocalMillis = iChronology.getDateTimeMillis(values[0], values[1], values[2], 0);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Constructs an instance set to the specified date and time
      * using <code>ISOChronology</code>.
@@ -429,10 +435,7 @@ public final class LocalDate
      * @param monthOfYear  the month of the year, from 1 to 12
      * @param dayOfMonth  the day of the month, from 1 to 31
      */
-    public LocalDate(
-            int year,
-            int monthOfYear,
-            int dayOfMonth) {
+    public LocalDate(int year, int monthOfYear, int dayOfMonth) {
         this(year, monthOfYear, dayOfMonth, ISOChronology.getInstanceUTC());
     }
 
@@ -447,11 +450,7 @@ public final class LocalDate
      * @param dayOfMonth  the day of the month, valid values defined by the chronology
      * @param chronology  the chronology, null means ISOChronology in default zone
      */
-    public LocalDate(
-            int year,
-            int monthOfYear,
-            int dayOfMonth,
-            Chronology chronology) {
+    public LocalDate(int year, int monthOfYear, int dayOfMonth, Chronology chronology) {
         super();
         chronology = DateTimeUtils.getChronology(chronology).withUTC();
         long instant = chronology.getDateTimeMillis(year, monthOfYear, dayOfMonth, 0);
@@ -473,7 +472,7 @@ public final class LocalDate
         return this;
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Gets the number of fields in this partial, which is three.
      * The supported fields are Year, MonthOfYear and DayOfMonth.
@@ -496,7 +495,7 @@ public final class LocalDate
      * @return the field
      */
     protected DateTimeField getField(int index, Chronology chrono) {
-        switch (index) {
+        switch(index) {
             case YEAR:
                 return chrono.year();
             case MONTH_OF_YEAR:
@@ -521,7 +520,7 @@ public final class LocalDate
      * @throws IndexOutOfBoundsException if the index is invalid
      */
     public int getValue(int index) {
-        switch (index) {
+        switch(index) {
             case YEAR:
                 return getChronology().year().get(getLocalMillis());
             case MONTH_OF_YEAR:
@@ -533,7 +532,7 @@ public final class LocalDate
         }
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Get the value of one of the fields of a datetime.
      * <p>
@@ -571,9 +570,7 @@ public final class LocalDate
             return false;
         }
         DurationFieldType durType = type.getDurationType();
-        if (DATE_DURATION_TYPES.contains(durType) ||
-                durType.getField(getChronology()).getUnitMillis() >=
-                    getChronology().days().getUnitMillis()) {
+        if (DATE_DURATION_TYPES.contains(durType) || durType.getField(getChronology()).getUnitMillis() >= getChronology().days().getUnitMillis()) {
             return type.getField(getChronology()).isSupported();
         }
         return false;
@@ -591,18 +588,17 @@ public final class LocalDate
             return false;
         }
         DurationField field = type.getField(getChronology());
-        if (DATE_DURATION_TYPES.contains(type) ||
-            field.getUnitMillis() >= getChronology().days().getUnitMillis()) {
+        if (DATE_DURATION_TYPES.contains(type) || field.getUnitMillis() >= getChronology().days().getUnitMillis()) {
             return field.isSupported();
         }
         return false;
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Gets the local milliseconds from the Java epoch
      * of 1970-01-01T00:00:00 (not fixed to any specific time zone).
-     * 
+     *
      * @return the number of milliseconds since 1970-01-01T00:00:00
      * @since 1.5 (previously private)
      */
@@ -612,14 +608,14 @@ public final class LocalDate
 
     /**
      * Gets the chronology of the date.
-     * 
+     *
      * @return the Chronology that the date is using
      */
     public Chronology getChronology() {
         return iChronology;
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Compares this ReadablePartial with another returning true if the chronology,
      * field types and values are equal.
@@ -679,15 +675,13 @@ public final class LocalDate
         if (partial instanceof LocalDate) {
             LocalDate other = (LocalDate) partial;
             if (iChronology.equals(other.iChronology)) {
-                return (iLocalMillis < other.iLocalMillis ? -1 :
-                            (iLocalMillis == other.iLocalMillis ? 0 : 1));
-
+                return (iLocalMillis < other.iLocalMillis ? -1 : (iLocalMillis == other.iLocalMillis ? 0 : 1));
             }
         }
         return super.compareTo(partial);
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Converts this LocalDate to a full datetime at the earliest valid time
      * for the date using the default time zone.
@@ -698,7 +692,7 @@ public final class LocalDate
      * This method handles that situation by returning 01:00 on that date.
      * <p>
      * This instance is immutable and unaffected by this method call.
-     * 
+     *
      * @return this date as a datetime at the start of the day
      * @since 1.5
      */
@@ -733,7 +727,7 @@ public final class LocalDate
         return new DateTime(instant, chrono);
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Converts this LocalDate to a full datetime at midnight using the default
      * time zone.
@@ -744,7 +738,7 @@ public final class LocalDate
      * midnight on the required date, and as such an exception is thrown.
      * <p>
      * This instance is immutable and unaffected by this method call.
-     * 
+     *
      * @return this date as a datetime at midnight
      * @deprecated Use {@link #toDateTimeAtStartOfDay()} which won't throw an exception
      */
@@ -778,7 +772,7 @@ public final class LocalDate
         return new DateTime(getYear(), getMonthOfYear(), getDayOfMonth(), 0, 0, 0, 0, chrono);
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Converts this LocalDate to a full datetime using the default time zone
      * setting the date fields from this instance and the time fields from
@@ -819,7 +813,7 @@ public final class LocalDate
         return new DateTime(resolved, chrono);
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Converts this LocalDate to a DateMidnight in the default time zone.
      * <p>
@@ -867,7 +861,7 @@ public final class LocalDate
         return new DateMidnight(getYear(), getMonthOfYear(), getDayOfMonth(), chrono);
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Converts this object to a LocalDateTime using a LocalTime to fill in
      * the missing fields.
@@ -895,7 +889,7 @@ public final class LocalDate
         return new LocalDateTime(localMillis, getChronology());
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Converts this object to a DateTime using a LocalTime to fill in the
      * missing fields and using the default time zone.
@@ -955,13 +949,10 @@ public final class LocalDate
             throw new IllegalArgumentException("The chronology of the time does not match");
         }
         Chronology chrono = getChronology().withZone(zone);
-        return new DateTime(
-                        getYear(), getMonthOfYear(), getDayOfMonth(),
-                        time.getHourOfDay(), time.getMinuteOfHour(),
-                        time.getSecondOfMinute(), time.getMillisOfSecond(), chrono);
+        return new DateTime(getYear(), getMonthOfYear(), getDayOfMonth(), time.getHourOfDay(), time.getMinuteOfHour(), time.getSecondOfMinute(), time.getMillisOfSecond(), chrono);
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Converts this object to an Interval representing the whole day
      * in the default time zone.
@@ -995,7 +986,7 @@ public final class LocalDate
         return new Interval(start, end);
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Get the date time as a <code>java.util.Date</code>.
      * <p>
@@ -1017,7 +1008,6 @@ public final class LocalDate
         Date date = new Date(getYear() - 1900, getMonthOfYear() - 1, dom);
         LocalDate check = LocalDate.fromDateFields(date);
         if (check.isBefore(this)) {
-            // DST gap (no midnight)
             // move forward in units of one hour until date correct
             while (check.equals(this) == false) {
                 date.setTime(date.getTime() + 3600000);
@@ -1039,7 +1029,7 @@ public final class LocalDate
         return date;
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Returns a copy of this date with different local millis.
      * <p>
@@ -1055,7 +1045,7 @@ public final class LocalDate
         return (newMillis == getLocalMillis() ? this : new LocalDate(newMillis, getChronology()));
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Returns a copy of this date with the partial set of fields replacing
      * those from this instance.
@@ -1137,7 +1127,7 @@ public final class LocalDate
         return withLocalMillis(instant);
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Returns a copy of this date with the specified period added.
      * <p>
@@ -1172,7 +1162,7 @@ public final class LocalDate
         return withLocalMillis(instant);
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Returns a copy of this date with the specified period added.
      * <p>
@@ -1193,7 +1183,7 @@ public final class LocalDate
         return withPeriodAdded(period, 1);
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Returns a copy of this date plus the specified number of years.
      * <p>
@@ -1291,7 +1281,7 @@ public final class LocalDate
         return withLocalMillis(instant);
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Returns a copy of this date with the specified period taken away.
      * <p>
@@ -1312,7 +1302,7 @@ public final class LocalDate
         return withPeriodAdded(period, -1);
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Returns a copy of this date minus the specified number of years.
      * <p>
@@ -1410,7 +1400,7 @@ public final class LocalDate
         return withLocalMillis(instant);
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Gets the property object for the specified type, which contains many
      * useful methods.
@@ -1429,7 +1419,7 @@ public final class LocalDate
         return new Property(this, fieldType.getField(getChronology()));
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Get the era field value.
      *
@@ -1544,7 +1534,7 @@ public final class LocalDate
         return getChronology().dayOfWeek().get(getLocalMillis());
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Returns a copy of this date with the era field updated.
      * <p>
@@ -1721,7 +1711,7 @@ public final class LocalDate
         return withLocalMillis(getChronology().dayOfWeek().set(getLocalMillis(), dayOfWeek));
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Get the era property which provides access to advanced functionality.
      *
@@ -1821,7 +1811,7 @@ public final class LocalDate
         return new Property(this, getChronology().dayOfWeek());
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Output the date time in ISO8601 format (yyyy-MM-dd).
      *
@@ -1859,7 +1849,6 @@ public final class LocalDate
         return DateTimeFormat.forPattern(pattern).withLocale(locale).print(this);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * LocalDate.Property binds a LocalDate to a DateTimeField allowing
      * powerful datetime functionality to be easily accessed.
@@ -1888,18 +1877,25 @@ public final class LocalDate
      * @since 1.3
      */
     public static final class Property extends AbstractReadableInstantFieldProperty {
-        
-        /** Serialization version */
+
+        /**
+         * Serialization version
+         */
         private static final long serialVersionUID = -3193829732634L;
-        
-        /** The instant this property is working against */
+
+        /**
+         * The instant this property is working against
+         */
         private transient LocalDate iInstant;
-        /** The field this property is working against */
+
+        /**
+         * The field this property is working against
+         */
         private transient DateTimeField iField;
-        
+
         /**
          * Constructor.
-         * 
+         *
          * @param instant  the instant to set
          * @param field  the field to use
          */
@@ -1908,7 +1904,7 @@ public final class LocalDate
             iInstant = instant;
             iField = field;
         }
-        
+
         /**
          * Writes the property in a safe serialization format.
          */
@@ -1926,45 +1922,45 @@ public final class LocalDate
             iField = type.getField(iInstant.getChronology());
         }
 
-        //-----------------------------------------------------------------------
+        // -----------------------------------------------------------------------
         /**
          * Gets the field being used.
-         * 
+         *
          * @return the field
          */
         public DateTimeField getField() {
             return iField;
         }
-        
+
         /**
          * Gets the milliseconds of the date that this property is linked to.
-         * 
+         *
          * @return the milliseconds
          */
         protected long getMillis() {
             return iInstant.getLocalMillis();
         }
-        
+
         /**
          * Gets the chronology of the datetime that this property is linked to.
-         * 
+         *
          * @return the chronology
          * @since 1.4
          */
         protected Chronology getChronology() {
             return iInstant.getChronology();
         }
-        
+
         /**
          * Gets the LocalDate object linked to this property.
-         * 
+         *
          * @return the linked LocalDate
          */
         public LocalDate getLocalDate() {
             return iInstant;
         }
-        
-        //-----------------------------------------------------------------------
+
+        // -----------------------------------------------------------------------
         /**
          * Adds to this field in a copy of this LocalDate.
          * <p>
@@ -1977,7 +1973,7 @@ public final class LocalDate
         public LocalDate addToCopy(int value) {
             return iInstant.withLocalMillis(iField.add(iInstant.getLocalMillis(), value));
         }
-        
+
         /**
          * Adds to this field, possibly wrapped, in a copy of this LocalDate.
          * A field wrapped operation only changes this field.
@@ -1992,8 +1988,8 @@ public final class LocalDate
         public LocalDate addWrapFieldToCopy(int value) {
             return iInstant.withLocalMillis(iField.addWrapField(iInstant.getLocalMillis(), value));
         }
-        
-        //-----------------------------------------------------------------------
+
+        // -----------------------------------------------------------------------
         /**
          * Sets this field in a copy of the LocalDate.
          * <p>
@@ -2006,7 +2002,7 @@ public final class LocalDate
         public LocalDate setCopy(int value) {
             return iInstant.withLocalMillis(iField.set(iInstant.getLocalMillis(), value));
         }
-        
+
         /**
          * Sets this field in a copy of the LocalDate to a parsed text value.
          * <p>
@@ -2020,7 +2016,7 @@ public final class LocalDate
         public LocalDate setCopy(String text, Locale locale) {
             return iInstant.withLocalMillis(iField.set(iInstant.getLocalMillis(), text, locale));
         }
-        
+
         /**
          * Sets this field in a copy of the LocalDate to a parsed text value.
          * <p>
@@ -2033,8 +2029,8 @@ public final class LocalDate
         public LocalDate setCopy(String text) {
             return setCopy(text, null);
         }
-        
-        //-----------------------------------------------------------------------
+
+        // -----------------------------------------------------------------------
         /**
          * Returns a new LocalDate with this field set to the maximum value
          * for this field.
@@ -2052,7 +2048,7 @@ public final class LocalDate
         public LocalDate withMaximumValue() {
             return setCopy(getMaximumValue());
         }
-        
+
         /**
          * Returns a new LocalDate with this field set to the minimum value
          * for this field.
@@ -2064,8 +2060,8 @@ public final class LocalDate
         public LocalDate withMinimumValue() {
             return setCopy(getMinimumValue());
         }
-        
-        //-----------------------------------------------------------------------
+
+        // -----------------------------------------------------------------------
         /**
          * Rounds to the lowest whole unit of this field on a copy of this
          * LocalDate.
@@ -2079,7 +2075,7 @@ public final class LocalDate
         public LocalDate roundFloorCopy() {
             return iInstant.withLocalMillis(iField.roundFloor(iInstant.getLocalMillis()));
         }
-        
+
         /**
          * Rounds to the highest whole unit of this field on a copy of this
          * LocalDate.
@@ -2093,7 +2089,7 @@ public final class LocalDate
         public LocalDate roundCeilingCopy() {
             return iInstant.withLocalMillis(iField.roundCeiling(iInstant.getLocalMillis()));
         }
-        
+
         /**
          * Rounds to the nearest whole unit of this field on a copy of this
          * LocalDate, favoring the floor if halfway.
@@ -2103,7 +2099,7 @@ public final class LocalDate
         public LocalDate roundHalfFloorCopy() {
             return iInstant.withLocalMillis(iField.roundHalfFloor(iInstant.getLocalMillis()));
         }
-        
+
         /**
          * Rounds to the nearest whole unit of this field on a copy of this
          * LocalDate, favoring the ceiling if halfway.
@@ -2113,7 +2109,7 @@ public final class LocalDate
         public LocalDate roundHalfCeilingCopy() {
             return iInstant.withLocalMillis(iField.roundHalfCeiling(iInstant.getLocalMillis()));
         }
-        
+
         /**
          * Rounds to the nearest whole unit of this field on a copy of this
          * LocalDate.  If halfway, the ceiling is favored over the floor
@@ -2125,5 +2121,4 @@ public final class LocalDate
             return iInstant.withLocalMillis(iField.roundHalfEven(iInstant.getLocalMillis()));
         }
     }
-
 }
